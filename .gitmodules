@@ -46,3 +46,12 @@
 [submodule "modules/patch"]
 	path = modules/patch
 	url = https://github.com/Pullinux/plx-patch.git
+[submodule "modules/sed"]
+	path = modules/sed
+	url = https://github.com/Pullinux/plx-sed.git
+[submodule "modules/tar"]
+	path = modules/tar
+	url = https://github.com/Pullinux/plx-tar.git
+[submodule "modules/xz"]
+	path = modules/xz
+	url = https://github.com/Pullinux/plx-xz.git
