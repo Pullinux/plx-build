@@ -1,0 +1,3 @@
+[submodule "modules/binutils"]
+	path = modules/binutils
+	url = https://github.com/Pullinux/plx-binutils
