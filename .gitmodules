@@ -19,3 +19,30 @@
 [submodule "modules/bash"]
 	path = modules/bash
 	url = https://github.com/Pullinux/plx-bash.git
+[submodule "modules/coreutils"]
+	path = modules/coreutils
+	url = https://github.com/Pullinux/plx-coreutils.git
+[submodule "modules/diffutils"]
+	path = modules/diffutils
+	url = https://github.com/Pullinux/plx-diffutils.git
+[submodule "modules/file"]
+	path = modules/file
+	url = https://github.com/Pullinux/plx-file.git
+[submodule "modules/gawk"]
+	path = modules/gawk
+	url = https://github.com/Pullinux/plx-gawk.git
+[submodule "modules/findutils"]
+	path = modules/findutils
+	url = https://github.com/Pullinux/plx-findutils.git
+[submodule "modules/gzip"]
+	path = modules/gzip
+	url = https://github.com/Pullinux/plx-gzip.git
+[submodule "modules/grep"]
+	path = modules/grep
+	url = https://github.com/Pullinux/plx-grep.git
+[submodule "modules/make"]
+	path = modules/make
+	url = https://github.com/Pullinux/plx-make.git
+[submodule "modules/patch"]
+	path = modules/patch
+	url = https://github.com/Pullinux/plx-patch.git
