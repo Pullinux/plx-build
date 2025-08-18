@@ -1,3 +1,6 @@
 [submodule "modules/binutils"]
 	path = modules/binutils
 	url = https://github.com/Pullinux/plx-binutils
+[submodule "modules/gcc"]
+	path = modules/gcc
+	url = https://github.com/Pullinux/plx-gcc
