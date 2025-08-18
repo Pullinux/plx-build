@@ -17,6 +17,9 @@ git_init() {
     git remote add origin https://github.com/Pullinux/plx-$1.git
     git push -u origin master
 
+    echo "Waiting for init..."
+    sleep 5
+
     cd ~/git/plx-build
     git submodule add https://github.com/Pullinux/plx-$1.git modules/$1
 

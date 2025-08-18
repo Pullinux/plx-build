@@ -16,3 +16,6 @@
 [submodule "modules/ncurses"]
 	path = modules/ncurses
 	url = https://github.com/Pullinux/plx-ncurses
+[submodule "modules/bash"]
+	path = modules/bash
+	url = https://github.com/Pullinux/plx-bash.git
