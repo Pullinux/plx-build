@@ -239,5 +239,62 @@ build_cross_coreutils() {
 	deinit_module coreutils
 }
 
+build_cross_diffutils() {
+	init_module diffutils
+	pushd modules/diffutils
 
+	./configure --prefix=/usr   \
+            --host=$PLX_TGT \
+            --build=$(./build-aux/config.guess)
+
+	build_cross_destdir
+
+	popd
+	deinit_module diffutils
+}
+
+build_cross_file() {
+	init_module file
+	pushd modules/file
+
+	autoreconf --force
+
+	mkdir build
+	pushd build
+	  ../configure --disable-bzlib      \
+	               --disable-libseccomp \
+	               --disable-xzlib      \
+	               --disable-zlib
+	  make
+	popd
+
+	echo "CONFIGURE"
+	./configure --prefix=/usr --host=$PLX_TGT --build=$(./config.guess)
+
+	echo "MAKE"
+	make FILE_COMPILE=$(pwd)/build/src/file
+
+	make DESTDIR=$PLX install
+
+	rm -v $PLX/usr/lib/libmagic.la
+
+	popd
+	deinit_module file
+}
+
+build_cross_findutils() {
+	init_module findutils
+	pushd modules/findutils
+
+	autoreconf --force
+	./configure --prefix=/usr                   \
+            --localstatedir=/var/lib/locate \
+            --host=$PLX_TGT                 \
+            --build=$(build-aux/config.guess)
+
+	build_cross_destdir
+
+	popd
+	deinit_module findutils
+}
 

@@ -40,4 +40,7 @@ run_step build_cross_m4
 run_step build_cross_ncurses
 run_step build_cross_bash
 run_step build_cross_coreutils
+run_step build_cross_diffutils
+run_step build_cross_file
+run_step build_cross_findutils
 
