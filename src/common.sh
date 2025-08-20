@@ -14,6 +14,7 @@ deinit_module() {
 
 git_init() {
     git init
+    find . -name "*.gitignore" -exec rm {} \;
     git add .
     git commit -m "first commit"
     git branch -M master
@@ -25,6 +26,9 @@ git_init() {
 
     cd ~/git/plx-build
     git submodule add https://github.com/Pullinux/plx-$1.git modules/$1
+
+    git submodule set-branch --branch master modules/$1
+    git submodule sync modules/$1
 
     deinit_module $1
     du -sh .
@@ -76,6 +80,109 @@ plx_create_paths() {
     sudo chown -v $BUILD_USER $PLX/{usr{,/*},var,etc,tools,lib64}
 }
 
+plx_prep_virt() {
+	sudo chown -R root:root $PLX/{usr,lib,var,etc,bin,sbin,tools,lib64}
+	sudo mkdir -pv $PLX/{dev,proc,sys,run}
+	sudo mkdir -pv $PLX/usr/share/plx/{bin,tmp,src}
+}
+
+plx_mount_virt() {
+
+	: "${PLX:?}"
+
+	if ! mountpoint -q "$PLX/dev"; then
+		sudo mount -v --bind /dev "$PLX/dev"
+	fi
+
+	if ! mountpoint -q "$PLX/dev/pts"; then
+		sudo mount -vt devpts devpts -o gid=5,mode=0620 $PLX/dev/pts
+	fi
+
+	if ! mountpoint -q "$PLX/proc"; then
+		sudo mount -vt proc proc $PLX/proc
+	fi
+
+	if ! mountpoint -q "$PLX/sys"; then
+                sudo mount -vt sysfs sysfs $PLX/sys
+        fi
+
+	if ! mountpoint -q "$PLX/run"; then
+                sudo mount -vt tmpfs tmpfs $PLX/run
+        fi
+
+	if [ -h $PLX/dev/shm ]; then
+	  sudo install -v -d -m 1777 $PLX$(realpath /dev/shm)
+  	elif ! mountpoint -q "$PLX/dev/shm"; then
+	  sudo mount -vt tmpfs -o nosuid,nodev tmpfs $PLX/dev/shm
+	fi
+
+}
+
+plx_umount_virt() {
+
+	: "${PLX:?}"
+
+	sudo mountpoint -q $PLX/dev/shm && sudo umount $PLX/dev/shm
+
+	if mountpoint -q "$PLX/dev/pts"; then
+              sudo umount $PLX/dev/pts
+        fi
+
+        if mountpoint -q "$PLX/proc"; then
+                sudo umount  $PLX/proc
+        fi
+
+        if mountpoint -q "$PLX/sys"; then
+                sudo umount $PLX/sys
+        fi
+
+        if mountpoint -q "$PLX/run"; then
+                sudo umount $PLX/run
+        fi
+
+        if mountpoint -q "$PLX/dev"; then
+                sudo umount $PLX/dev
+        fi
+
+}
+
+run_in_chroot() {
+	sudo cp $SRC_DIR/$1 ${PLX:?}/usr/share/plx/tmp/
+
+	sudo cp $SRC_DIR/env.sh $PLX/usr/share/plx/bin/
+
+	sudo chroot "$PLX" /usr/bin/env -i   \
+	    HOME=/root                  \
+	    TERM="$TERM"                \
+	    PATH=/usr/bin:/usr/sbin     \
+	    MAKEFLAGS="-j$(nproc)"      \
+	    TESTSUITEFLAGS="-j$(nproc)" \
+	    /bin/bash --login -c "cd /usr/share/plx/tmp/ && . /usr/share/plx/bin/env.sh && . /usr/share/plx/tmp/$1 $2"
+
+	sudo rm ${PLX:?}/usr/share/plx/tmp/$1
+}
+
 plx_user_setup() {
     echo "nothing"
 }
+
+plx_fs_setup() {
+	run_in_chroot chr_util.sh fs_setup
+}
+
+plx_create_init_config() {
+	run_in_chroot chr_util.sh create_init_config
+}
+
+plx_build_module_chr() {
+	init_module $1
+	sudo cp -r modules/$1 $PLX/usr/share/plx/tmp/
+	deinit_module $1
+
+	run_in_chroot chr_util.sh $2
+}
+
+plx_build_gettext() {
+	plx_build_module_chr gettext build_gettext
+}
+

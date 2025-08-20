@@ -32,11 +32,11 @@ build_cross_gcc_p1() {
 
     sed -e '/m64=/s/lib64/lib/' -i.orig gcc/config/i386/t-linux64
 
-    tar -xf ../mpfr-4.2.1.tar.xz
+    tar -xf mpfr-4.2.1.tar.xz
     mv -v mpfr-4.2.1 mpfr
-    tar -xf ../gmp-6.3.0.tar.xz
+    tar -xf gmp-6.3.0.tar.xz
     mv -v gmp-6.3.0 gmp
-    tar -xf ../mpc-1.3.1.tar.gz
+    tar -xf mpc-1.3.1.tar.gz
     mv -v mpc-1.3.1 mpc
 
 
@@ -296,5 +296,216 @@ build_cross_findutils() {
 
 	popd
 	deinit_module findutils
+}
+
+build_cross_gawk() {
+	init_module gawk
+	pushd modules/gawk
+
+	autoreconf -f
+
+	sed -i 's/extras//' Makefile.in
+
+	./configure --prefix=/usr   \
+            --host=$PLX_TGT \
+            --build=$(build-aux/config.guess)
+
+	build_cross_destdir
+
+	popd
+	deinit_module gawk
+}
+
+build_cross_grep() {
+	init_module grep
+	pushd modules/grep
+
+	autoreconf -f
+
+	./configure --prefix=/usr   \
+            --host=$PLX_TGT \
+            --build=$(./build-aux/config.guess)
+
+	build_cross_destdir
+
+	popd
+	deinit_module grep
+}
+
+build_cross_gzip() {
+	init_module gzip
+	pushd modules/gzip
+
+	autoreconf -f
+
+	./configure --prefix=/usr --host=$PLX_TGT
+
+	build_cross_destdir
+
+	popd
+	deinit_module gzip
+}
+
+build_cross_make() {
+	init_module make
+	pushd modules/make
+
+	autoreconf -f
+
+	./configure --prefix=/usr   \
+            --without-guile \
+            --host=$PLX_TGT \
+            --build=$(build-aux/config.guess)
+
+	build_cross_destdir
+
+	popd
+	deinit_module make
+}
+
+build_cross_patch() {
+        init_module patch
+        pushd modules/patch
+
+	autoreconf -f
+
+        ./configure --prefix=/usr   \
+            --host=$PLX_TGT \
+            --build=$(build-aux/config.guess)
+
+        build_cross_destdir
+
+        popd
+        deinit_module patch
+}
+
+build_cross_sed() {
+	init_module sed
+	pushd modules/sed
+
+	autoreconf -f
+
+        ./configure --prefix=/usr   \
+            --host=$PLX_TGT \
+            --build=$(build-aux/config.guess)
+
+        build_cross_destdir
+
+	popd
+	deinit_module sed
+}
+
+build_cross_tar() {
+        init_module tar
+        pushd modules/tar
+
+        autoreconf -f
+
+        ./configure --prefix=/usr   \
+            --host=$PLX_TGT \
+            --build=$(build-aux/config.guess)
+
+        build_cross_destdir
+
+        popd
+        deinit_module tar
+}
+
+build_cross_xz() {
+        init_module xz
+        pushd modules/xz
+
+        autoreconf -f
+
+        ./configure --prefix=/usr   \
+            --host=$PLX_TGT \
+	    --disable-static --docdir=/usr/share/doc/xz-5.6.4 \
+            --build=$(build-aux/config.guess)
+
+        build_cross_destdir
+
+	rm -v $PLX/usr/lib/liblzma.la
+
+        popd
+        deinit_module xz
+}
+
+build_cross_binutils_p2() {
+	init_module binutils
+	pushd modules/binutils
+
+	rm -rf build
+	sed '6031s/$add_dir//' -i ltmain.sh
+
+	mkdir build && cd build
+
+	../configure                   \
+	    --prefix=/usr              \
+	    --build=$(../config.guess) \
+	    --host=$PLX_TGT            \
+	    --disable-nls              \
+	    --enable-shared            \
+	    --enable-gprofng=no        \
+	    --disable-werror           \
+	    --enable-64-bit-bfd        \
+	    --enable-new-dtags         \
+	    --enable-default-hash-style=gnu
+
+	build_cross_destdir
+
+	rm -v $PLX/usr/lib/lib{bfd,ctf,ctf-nobfd,opcodes,sframe}.{a,la}
+
+	popd
+	deinit_module binutils
+}
+
+build_cross_gcc_p2() {
+	init_module gcc
+	pushd modules/gcc
+
+	rm -rf mpfr mpc gmp
+
+	tar -xf mpfr-4.2.1.tar.xz
+	mv -v mpfr-4.2.1 mpfr
+	tar -xf gmp-6.3.0.tar.xz
+	mv -v gmp-6.3.0 gmp
+	tar -xf mpc-1.3.1.tar.gz
+	mv -v mpc-1.3.1 mpc
+
+	sed -e '/m64=/s/lib64/lib/' \
+ 	       -i.orig gcc/config/i386/t-linux64
+
+	sed '/thread_header =/s/@.*@/gthr-posix.h/' \
+    		-i libgcc/Makefile.in libstdc++-v3/include/Makefile.in
+
+	rm -rf build
+
+	mkdir build && cd build
+
+	../configure                                       \
+	    --build=$(../config.guess)                     \
+	    --host=$PLX_TGT                                \
+	    --target=$PLX_TGT                              \
+	    LDFLAGS_FOR_TARGET=-L$PWD/$PLX_TGT/libgcc      \
+	    --prefix=/usr                                  \
+	    --with-build-sysroot=$PLX                      \
+	    --enable-default-pie                           \
+	    --enable-default-ssp                           \
+	    --disable-nls                                  \
+	    --disable-multilib                             \
+	    --disable-libatomic                            \
+	    --disable-libgomp                              \
+	    --disable-libquadmath                          \
+	    --disable-libsanitizer                         \
+	    --disable-libssp                               \
+	    --disable-libvtv                               \
+	    --enable-languages=c,c++
+
+	build_cross_destdir
+
+	ln -sv gcc $PLX/usr/bin/cc
+
+	popd
+	deinit_module gcc
 }
 

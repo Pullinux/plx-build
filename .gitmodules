@@ -57,3 +57,7 @@
 [submodule "modules/xz"]
 	path = modules/xz
 	url = https://github.com/Pullinux/plx-xz.git
+[submodule "modules/gettext"]
+	path = modules/gettext
+	url = https://github.com/Pullinux/plx-gettext.git
+	branch = master
