@@ -1,3 +1,4 @@
+set -Eeuo pipefail
 
 fs_setup() {
 	mkdir -pv /{boot,home,mnt,opt,srv}
@@ -90,7 +91,8 @@ chmod -v 600  /var/log/btmp
 }
 
 build_gettext() {
-	cd /usr/share/plx/tmp/gettext/
+	echo "Building GetText in $(pwd)"
+
 	./configure --disable-shared
 	make
 	cp -v gettext-tools/src/{msgfmt,msgmerge,xgettext} /usr/bin

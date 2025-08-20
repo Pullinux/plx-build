@@ -149,6 +149,8 @@ plx_umount_virt() {
 run_in_chroot() {
 	sudo cp $SRC_DIR/$1 ${PLX:?}/usr/share/plx/tmp/
 
+	sudo touch $PLX/usr/share/plx/tmp/prep.sh
+
 	sudo cp $SRC_DIR/env.sh $PLX/usr/share/plx/bin/
 
 	sudo chroot "$PLX" /usr/bin/env -i   \
@@ -157,7 +159,7 @@ run_in_chroot() {
 	    PATH=/usr/bin:/usr/sbin     \
 	    MAKEFLAGS="-j$(nproc)"      \
 	    TESTSUITEFLAGS="-j$(nproc)" \
-	    /bin/bash --login -c "cd /usr/share/plx/tmp/ && . /usr/share/plx/bin/env.sh && . /usr/share/plx/tmp/$1 $2"
+	    /bin/bash --login -c "cd /usr/share/plx/tmp/ && . /usr/share/plx/bin/env.sh && . /usr/share/plx/tmp/prep.sh && . /usr/share/plx/tmp/$1 $2"
 
 	sudo rm ${PLX:?}/usr/share/plx/tmp/$1
 }
@@ -174,6 +176,23 @@ plx_create_init_config() {
 	run_in_chroot chr_util.sh create_init_config
 }
 
+plx_prep_release_build() {
+	echo "checking subpath: $(pwd)/modules/bin-releases/$1"
+	SP=$(tar -tf "modules/bin-releases/$1" | awk -F/ '{print $1}' | head -1 || true)
+
+	echo "Subpath: $SP"
+
+	sudo cp modules/bin-releases/$1 $PLX/usr/share/plx/tmp/
+
+	pushd $PLX/usr/share/plx/tmp/	
+	sudo tar -xf $1
+	sudo rm $1
+
+	popd
+
+	echo "cd $SP" | sudo tee $PLX/usr/share/plx/tmp/prep.sh > /dev/null
+}
+
 plx_build_module_chr() {
 	init_module $1
 	sudo cp -r modules/$1 $PLX/usr/share/plx/tmp/
@@ -183,6 +202,8 @@ plx_build_module_chr() {
 }
 
 plx_build_gettext() {
-	plx_build_module_chr gettext build_gettext
+	echo "Prepping..."
+	plx_prep_release_build "gettext-0.24.tar.xz"
+	run_in_chroot chr_util.sh "build_gettext"
 }
 

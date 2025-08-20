@@ -61,3 +61,6 @@
 	path = modules/gettext
 	url = https://github.com/Pullinux/plx-gettext.git
 	branch = master
+[submodule "modules/bin-releases"]
+	path = modules/bin-releases
+	url = https://github.com/Pullinux/plx-bin-releases.git
