@@ -64,7 +64,18 @@ plx_mount_virt
 run_step plx_fs_setup
 run_step plx_create_init_config
 run_step plx_build_gettext
+run_step plx_build_bison
+run_step plx_build_perl
+run_step plx_build_python
+run_step plx_build_texinfo
+run_step plx_build_utillinux
+run_step plx_cross_cleanup
+
+echo "Cross Environment Done"
 
 plx_umount_virt
 
-echo "DONE"
+run_step plx_cross_backup
+
+echo "Build Environment Setup Complete"
+

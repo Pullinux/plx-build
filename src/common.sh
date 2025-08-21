@@ -52,7 +52,13 @@ run_step() {
     return 0
   fi
   echo "==> Running ${step}..."
-  "$step"    # call the function
+
+  if [[ -n "${1:-}" ]]; then
+	  "$step" "$1"
+  else
+  	"$step"    # call the function
+  fi
+  
   mark_step_done "$step"
 }
 
@@ -149,9 +155,13 @@ plx_umount_virt() {
 run_in_chroot() {
 	sudo cp $SRC_DIR/$1 ${PLX:?}/usr/share/plx/tmp/
 
+	sudo mkdir -p $PLX/usr/share/plx/tmp/inst
+
 	sudo touch $PLX/usr/share/plx/tmp/prep.sh
 
 	sudo cp $SRC_DIR/env.sh $PLX/usr/share/plx/bin/
+
+	echo "Running chroot: $1 - $2"
 
 	sudo chroot "$PLX" /usr/bin/env -i   \
 	    HOME=/root                  \
@@ -160,6 +170,8 @@ run_in_chroot() {
 	    MAKEFLAGS="-j$(nproc)"      \
 	    TESTSUITEFLAGS="-j$(nproc)" \
 	    /bin/bash --login -c "cd /usr/share/plx/tmp/ && . /usr/share/plx/bin/env.sh && . /usr/share/plx/tmp/prep.sh && . /usr/share/plx/tmp/$1 $2"
+
+	echo "chroot: $?"
 
 	sudo rm ${PLX:?}/usr/share/plx/tmp/$1
 }
@@ -177,10 +189,7 @@ plx_create_init_config() {
 }
 
 plx_prep_release_build() {
-	echo "checking subpath: $(pwd)/modules/bin-releases/$1"
 	SP=$(tar -tf "modules/bin-releases/$1" | awk -F/ '{print $1}' | head -1 || true)
-
-	echo "Subpath: $SP"
 
 	sudo cp modules/bin-releases/$1 $PLX/usr/share/plx/tmp/
 
@@ -202,8 +211,58 @@ plx_build_module_chr() {
 }
 
 plx_build_gettext() {
-	echo "Prepping..."
 	plx_prep_release_build "gettext-0.24.tar.xz"
 	run_in_chroot chr_util.sh "build_gettext"
+}
+
+plx_build_bison() {
+	plx_prep_release_build bison-3.8.2.tar.xz
+        run_in_chroot chr_util.sh build_bison
+}
+
+plx_build_perl() {
+	plx_prep_release_build perl-5.40.1.tar.xz
+        run_in_chroot chr_util.sh build_perl
+}
+
+
+plx_build_python() {
+        plx_prep_release_build Python-3.13.2.tar.xz
+        run_in_chroot chr_util.sh build_python
+}
+
+plx_build_texinfo() {
+        plx_prep_release_build texinfo-7.2.tar.xz
+        run_in_chroot chr_util.sh build_texinfo
+}
+
+plx_build_utillinux() {
+        plx_prep_release_build util-linux-2.40.4.tar.xz
+        run_in_chroot chr_util.sh build_utillinux
+}
+
+plx_build_beecrypt() {
+	plx_prep_release_build beecrypt-4.1.2.tar.gz
+        run_in_chroot chr_util.sh build_beecrypt
+}
+
+plx_build_neon() {
+	plx_prep_release_build neon-0.35.0.txz
+        run_in_chroot chr_util.sh build_neon
+}
+
+plx_build_rpm() {
+	plx_prep_release_build rpm-4.20.1.tar.bz2
+	run_in_chroot chr_util.sh build_rpm
+}
+
+plx_cross_cleanup() {
+	sudo rm -rf ${PLX:?}/usr/share/{info,man,doc}/*
+	sudo find $PLX/usr/{lib,libexec} -name \*.la -delete
+	sudo rm -rf $PLX/tools
+}
+
+plx_cross_backup() {
+	sudo tar -cJpf plx-temp-tools.txz -C ${PLX:?}/ .
 }
 
