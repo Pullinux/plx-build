@@ -1,0 +1,2 @@
+make BUILD_STATIC=no PREFIX=/usr
+make DESTDIR=$PCKDIR BUILD_STATIC=no PREFIX=/usr install

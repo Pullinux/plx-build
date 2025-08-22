@@ -1,0 +1,3 @@
+name=gcc
+version=14.2.0
+source=gcc-14.2.0.tar.xz

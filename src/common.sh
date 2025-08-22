@@ -161,17 +161,24 @@ run_in_chroot() {
 
 	sudo cp $SRC_DIR/env.sh $PLX/usr/share/plx/bin/
 
-	echo "Running chroot: $1 - $2"
+	func_param=""
+
+	if [[ -n "${3:-}" ]]; then
+		func_param="$3"
+		echo "RIC: Param: $func_param"
+	fi
+
+
+	echo "Running chroot: $1 - $2 - $func_param"
 
 	sudo chroot "$PLX" /usr/bin/env -i   \
 	    HOME=/root                  \
 	    TERM="$TERM"                \
+	    PS1='(lfs chroot) \u:\w\$ ' \
 	    PATH=/usr/bin:/usr/sbin     \
 	    MAKEFLAGS="-j$(nproc)"      \
 	    TESTSUITEFLAGS="-j$(nproc)" \
-	    /bin/bash --login -c "cd /usr/share/plx/tmp/ && . /usr/share/plx/bin/env.sh && . /usr/share/plx/tmp/prep.sh && . /usr/share/plx/tmp/$1 $2"
-
-	echo "chroot: $?"
+	    /bin/bash --login -c "cd /usr/share/plx/tmp/ && . /usr/share/plx/bin/env.sh && . /usr/share/plx/tmp/prep.sh && . /usr/share/plx/tmp/$1 && $2 $func_param"
 
 	sudo rm ${PLX:?}/usr/share/plx/tmp/$1
 }

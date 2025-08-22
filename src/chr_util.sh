@@ -168,7 +168,10 @@ build_neon() {
         make install
 }
 
-build_rpm() {
+build_pck() {
+	pck=$1
+
+	cd $pck
 	
 }
 

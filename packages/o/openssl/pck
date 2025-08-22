@@ -1,0 +1,3 @@
+name=openssl
+version=3.4.1
+source=openssl-3.4.1.tar.gz

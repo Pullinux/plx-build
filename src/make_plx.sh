@@ -11,7 +11,10 @@ SRC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source $SRC_DIR/common.sh
 source $SRC_DIR/plx_common.sh
 
+sudo mkdir -p $PLX/usr/share/plx/patches/
+
 sudo cp $SRC_DIR/plx_common.sh $PLX/usr/share/plx/tmp/
+sudo cp $SRC_DIR/../modules/bin-releases/*.patch $PLX/usr/share/plx/patches/
 
 #unmount virtual stuff if already mounted, just to be safe...
 plx_umount_virt
@@ -32,5 +35,44 @@ if [ ! -f .status ]; then
     echo "Starting new build..."
 fi
 
-build_package man-pages-6.12.tar.xz build_pck_manpages
+plx_mount_virt
 
+build_inst_pck man-pages
+build_inst_pck iana-etc
+build_inst_pck glibc
+build_inst_pck zlib
+build_inst_pck bzip2
+build_inst_pck xz
+build_inst_pck lz4
+build_inst_pck zstd
+build_inst_pck file
+build_inst_pck readline
+build_inst_pck m4
+build_inst_pck bc
+build_inst_pck flex
+build_inst_pck tcl
+build_inst_pck expect
+build_inst_pck dejagnu
+build_inst_pck pkgconf
+build_inst_pck binutils
+build_inst_pck gmp
+build_inst_pck mpfr
+build_inst_pck mpc
+build_inst_pck attr
+build_inst_pck acl
+build_inst_pck libcap
+build_inst_pck libxcrypt
+build_inst_pck shadow
+build_inst_pck gcc
+build_inst_pck ncurses
+build_inst_pck sed
+build_inst_pck psmisc
+build_inst_pck gettext
+build_inst_pck bison
+build_inst_pck grep
+build_inst_pck bash
+build_inst_pck libtool
+build_inst_pck gdbm
+build_inst_pck gperf
+
+plx_umount_virt
