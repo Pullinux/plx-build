@@ -319,7 +319,7 @@ build_pck() {
 	else
 		echo "Copying installer..."
 		sudo mkdir -p $PLX$PLX_ROOT/tmp/inst/.install
-		sudo cp -r install/* $PLX$PLX_ROOT/tmp/inst/.install
+		sudo cp -r install/* $PLX$PLX_ROOT/tmp/inst/.install/
 	fi
 
 	if [ -z "$(ls -A $PLX$PLX_ROOT/tmp/inst)" ]; then

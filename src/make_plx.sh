@@ -74,5 +74,22 @@ build_inst_pck bash
 build_inst_pck libtool
 build_inst_pck gdbm
 build_inst_pck gperf
+build_inst_pck expat
+build_inst_pck inetutils
+build_inst_pck less
+build_inst_pck perl
+build_inst_pck xml-parser
+build_inst_pck intltool
+build_inst_pck autoconf
+build_inst_pck automake
+build_inst_pck openssl
+build_inst_pck elfutils
+build_inst_pck libffi
+build_inst_pck python
+build_inst_pck flit_core
+build_inst_pck wheel
+build_inst_pck setuptools
+build_inst_pck ninja
+build_inst_pck meson
 
 plx_umount_virt
