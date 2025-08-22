@@ -295,7 +295,14 @@ build_pck() {
 	echo "export PCKBASE=$PLX_ROOT/tmp/$pck" | sudo tee $PLX/usr/share/plx/tmp/prep.sh > /dev/null
 	echo "export PCKDIR=$PLX_ROOT/tmp/inst" | sudo tee -a $PLX/usr/share/plx/tmp/prep.sh > /dev/null
 	echo "cd $PLX_ROOT/tmp/$pck" | sudo tee -a $PLX/usr/share/plx/tmp/prep.sh > /dev/null
-	
+
+	if [[ $source == https://* ]]; then
+		pushd files
+		sudo wget --continue $source
+		source=$(basename $source)
+		popd
+	fi
+
 	if [ "$source" != "" ]; then
 		sudo tar -xf files/$source
 

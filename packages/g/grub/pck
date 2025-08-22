@@ -1,0 +1,3 @@
+name=grub
+version=2.12
+source=grub-2.12.tar.xz

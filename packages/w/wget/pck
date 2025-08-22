@@ -1,0 +1,3 @@
+name=wget
+version=1.25.0
+source=wget-1.25.0.tar.gz

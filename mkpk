@@ -21,6 +21,18 @@ pckname_wver=${file%.t*}
 pckname=$(generate_name $pckname_wver)
 version="${pckname_wver##*-}"
 
+mkinstall="no"
+
+if [ "$2" == "-i" ]; then
+        mkinstall="yes"
+elif [ "$2" != "" ]; then
+        pckname=$2
+
+	if [ "$3" == "-i" ]; then
+		mkinstall="yes"
+	fi
+fi
+
 pckdir=${pckname:0:1}/$pckname
 
 mkdir -p packages/$pckdir/files
@@ -35,9 +47,9 @@ echo "name=$pckname" > packages/$pckdir/pck
 echo "version=$version" >> packages/$pckdir/pck
 echo "source=$file" >> packages/$pckdir/pck
 
-if [ "$2" == "-i" ]; then
-	mkdir -p packages/$pckdir/install
-	touch packages/$pckdir/install/install.sh
+if [ "$mkinstall" == "yes" ]; then
+        mkdir -p packages/$pckdir/install
+        touch packages/$pckdir/install/install.sh
 fi
 
 $editor packages/$pckdir/build.sh
