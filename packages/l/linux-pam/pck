@@ -1,0 +1,3 @@
+name=linux-pam
+version=1.7.0
+source=Linux-PAM-1.7.0.tar.xz
