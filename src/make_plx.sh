@@ -219,5 +219,7 @@ build_inst_pck wget
 build_inst_pck linux-pam
 build_inst_pck shadow-pam
 build_inst_pck systemd-pam
+build_inst_pck sudo
+build_inst_pck openssh
 
 plx_umount_virt
