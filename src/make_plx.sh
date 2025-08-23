@@ -222,4 +222,15 @@ build_inst_pck systemd-pam
 build_inst_pck sudo
 build_inst_pck openssh
 
+build_inst_pck icu
+build_inst_pck libxml2
+build_inst_pck docbook-xsl-nons
+build_inst_pck docbook-xml
+build_inst_pck libxslt
+build_inst_pck duktape
+build_inst_pck pcre2
+build_inst_pck docutils
+build_inst_pck glib
+build_inst_pck polkit
+
 plx_umount_virt
