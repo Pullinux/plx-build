@@ -216,5 +216,8 @@ build_inst_pck libtasn1
 build_inst_pck p11-kit
 build_inst_pck make-ca
 build_inst_pck wget
+build_inst_pck linux-pam
+build_inst_pck shadow-pam
+build_inst_pck systemd-pam
 
 plx_umount_virt
