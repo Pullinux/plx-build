@@ -1,7 +1,7 @@
 
 make mrproper
 
-cp $PCKBASE/files/.config .
+cp $PCKBASE/files/config .config
 
 make
 
