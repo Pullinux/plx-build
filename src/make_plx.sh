@@ -379,4 +379,60 @@ build_inst_pck xterm
 build_inst_pck xclock
 build_inst_pck xinit
 
+build_inst_pck lynx
+build_inst_pck xdg-utils
+build_inst_pck libusb
+build_inst_pck cups
+build_inst_pck double-conversion
+build_inst_pck gstreamer
+build_inst_pck iso-codes
+build_inst_pck libgudev
+build_inst_pck cairo
+build_inst_pck pango
+build_inst_pck gst-plugins-base
+
+build_inst_pck libxkbcommon
+build_inst_pck sdl2
+build_inst_pck libwebp
+build_inst_pck qt6
+
+build_inst_pck extra-cmake-modules
+build_inst_pck plasma-wayland-protocols
+build_inst_pck kwindowsystem-lxqt
+build_inst_pck kconfig-lxqt
+build_inst_pck solid-lxqt
+build_inst_pck kidletime-lxqt
+build_inst_pck kwayland-lxqt
+build_inst_pck libkscreen-lxqt
+build_inst_pck layershell-qt-lxqt
+
+build_inst_pck muparser
+build_inst_pck lxqt-build-tools
+build_inst_pck libdbusmenu-lxqt
+build_inst_pck libqtxdg
+build_inst_pck lxqt-menu-data
+build_inst_pck polkit-qt-1
+build_inst_pck liblxqt
+build_inst_pck libsysstat
+build_inst_pck qtxdg-tools
+build_inst_pck libfm
+build_inst_pck itstool
+build_inst_pck editables
+build_inst_pck pathspec
+build_inst_pck packaging
+build_inst_pck setuptools_scm
+build_inst_pck pluggy
+build_inst_pck trove_classifiers
+build_inst_pck hatchling
+build_inst_pck pygments
+build_inst_pck gtk-doc
+build_inst_pck menu-cache
+build_inst_pck libfm-qt
+build_inst_pck lxqt-globalkeys
+build_inst_pck lxqt-qtplugin
+build_inst_pck pulseaudio
+build_inst_pck libstatgrab
+build_inst_pck lm-sensors
+build_inst_pck lxqt-panel
+
 plx_umount_virt

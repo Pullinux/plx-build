@@ -1,0 +1,32 @@
+Submitted By:            Dpig;as R. Reno <renodr at linuxfromscratch dot org>
+Date:                    2024-10-09
+Initial Package Version: 1.18.2
+Upstream Status:         Applied (see Cairo issue #870)
+Origin:                  Upstream
+Description:             Fixes a problem with printing some PDF files with
+                         fonts. This seems to impact PDFs made wuth lualatex,
+                         but can be triggered with other PDF files as well.
+                         The issue arises when rendering a PDF from poppler to
+                         a cairo PDF surface. The issue will exhibit itself as
+                         a "universal filter failed" error.
+
+diff -Naurp cairo-1.18.2.orig/src/cairo-cff-subset.c cairo-1.18.2/src/cairo-cff-subset.c
+--- cairo-1.18.2.orig/src/cairo-cff-subset.c	2024-09-01 08:09:23.000000000 -0500
++++ cairo-1.18.2/src/cairo-cff-subset.c	2024-10-09 13:45:33.935459812 -0500
+@@ -952,9 +952,13 @@ cairo_cff_font_read_private_dict (cairo_
+ 	 decode_number (operand, nominal_width);
+ 
+     num_subs = _cairo_array_num_elements (local_sub_index);
+-    *local_subs_used = _cairo_calloc_ab (num_subs, sizeof (cairo_bool_t));
+-    if (unlikely (*local_subs_used == NULL))
+-	return _cairo_error (CAIRO_STATUS_NO_MEMORY);
++    if (num_subs > 0) {
++       *local_subs_used = _cairo_calloc_ab (num_subs, sizeof (cairo_bool_t));
++       if (unlikely (*local_subs_used == NULL))
++          return _cairo_error (CAIRO_STATUS_NO_MEMORY);
++    } else {
++       *local_subs_used = NULL;
++    }
+ 
+     if (num_subs < 1240)
+ 	*local_sub_bias = 107;
