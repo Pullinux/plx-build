@@ -435,4 +435,51 @@ build_inst_pck libstatgrab
 build_inst_pck lm-sensors
 build_inst_pck lxqt-panel
 
+build_inst_pck oxygen-icons
+build_inst_pck pcmanfm-qt
+build_inst_pck upower
+build_inst_pck lxqt-powermanagement
+build_inst_pck lxqt-runner
+build_inst_pck lxqt-themes
+build_inst_pck lxqt-admin
+build_inst_pck lxqt-about
+build_inst_pck lxqt-config
+build_inst_pck lxqt-policykit
+build_inst_pck lxqt-sudo
+build_inst_pck lxqt-openssh-askpass
+build_inst_pck xdg-user-dirs
+build_inst_pck lxqt-session
+
+build_inst_pck shared-mime-info
+build_inst_pck gdk-pixbuf
+build_inst_pck librsvg
+build_inst_pck fuse
+build_inst_pck json-glib
+build_inst_pck libical
+build_inst_pck bluez
+build_inst_pck sbc
+build_inst_pck glu
+build_inst_pck v4l-utils
+build_inst_pck pipewire
+build_inst_pck wireplumber
+build_inst_pck bubblewrap
+build_inst_pck xdg-desktop-portal
+build_inst_pck xdg-desktop-portal-lxqt
+
+build_inst_pck hicolor-icon-theme
+build_inst_pck openbox
+build_inst_pck obconf-qt
+build_inst_pck breeze-icons
+build_inst_pck desktop-file-utils
+build_inst_pck lxqt-user-config
+
+build_inst_pck lximage-qt
+build_inst_pck lxqt-archiver
+build_inst_pck lxqt-notificationd
+build_inst_pck pavucontrol-qt
+build_inst_pck qps
+build_inst_pck qtermwidget
+build_inst_pck qterminal
+build_inst_pck screengrab
+
 plx_umount_virt
