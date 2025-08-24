@@ -1,0 +1,3 @@
+name=wayland
+version=1.23.0
+source=wayland-1.23.0.tar.xz

@@ -1,0 +1,3 @@
+name=libva-nomesa
+version=2.22.0
+source=libva-2.22.0.tar.gz

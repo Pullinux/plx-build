@@ -1,0 +1,3 @@
+name=spriv-llvm-translator
+version=19.1.4
+source=SPIRV-LLVM-Translator-19.1.4.tar.gz

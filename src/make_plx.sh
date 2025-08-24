@@ -321,6 +321,62 @@ build_inst_pck libsndfile
 build_inst_pck libvpx
 build_inst_pck x264
 build_inst_pck x265
+build_inst_pck xorg-config
 
+build_inst_pck util-macros
+build_inst_pck xorgproto
+build_inst_pck libXau
+build_inst_pck libXdmcp
+build_inst_pck xcb-proto
+build_inst_pck libxcb
+build_inst_pck xorg-libs
+
+build_inst_pck libxcvt
+build_inst_pck xcb-util
+build_inst_pck xcb-util-image
+build_inst_pck xcb-util-keysyms
+build_inst_pck xcb-util-renderutil
+build_inst_pck xcb-util-wm
+build_inst_pck xcb-util-cursor
+build_inst_pck wayland
+build_inst_pck wayland-protocols
+build_inst_pck vulkan-headers
+build_inst_pck vulkan-loader
+build_inst_pck libvdpau
+build_inst_pck libdrm
+build_inst_pck spriv-headers
+build_inst_pck spriv-tools
+build_inst_pck glslang
+build_inst_pck yaml
+build_inst_pck cython
+build_inst_pck pyyaml
+build_inst_pck mako
+build_inst_pck libva-nomesa
+build_inst_pck spriv-llvm-translator
+build_inst_pck libclc
+build_inst_pck ply
+build_inst_pck mesa
+build_inst_pck libva
+build_inst_pck xbitmaps
+build_inst_pck xorg-apps
+
+build_inst_pck luit
+build_inst_pck xcursor-themes
+build_inst_pck xorg-fonts
+build_inst_pck xkeyboard-config
+build_inst_pck libtirpc
+build_inst_pck libepoxy
+build_inst_pck xwayland
+build_inst_pck xorg-server
+build_inst_pck libevdev
+build_inst_pck mtdev
+build_inst_pck xf86-input-evdev
+build_inst_pck libinput
+build_inst_pck xf86-input-libinput
+build_inst_pck twm
+build_inst_pck dejavu-fonts-ttf
+build_inst_pck xterm
+build_inst_pck xclock
+build_inst_pck xinit
 
 plx_umount_virt
