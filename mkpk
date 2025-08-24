@@ -1,56 +1,17 @@
 #!/bin/bash
 
-file=$(basename $1)
 editor=code
 
-generate_name() {
-    pckname=$1
-    arr=(${pckname//-/ })
-    name_elements=$(expr ${#arr[@]} - 2)
-    name=${arr[0]}
+. pkshared $1 $2 $3
 
-    for i in $(seq 1 $name_elements);
-    do
-        name="$name-${arr[$i]}"
-    done
+cat > packages/$pckdir/build.sh << "EOF"
 
-    echo $name
-}
+./configure --prefix=/usr 
 
-pckname_wver=${file%.t*}
-pckname=$(generate_name $pckname_wver)
-version="${pckname_wver##*-}"
+make
 
-mkinstall="no"
+make DESTDIR=$PCKDIR install
 
-if [ "$2" == "-i" ]; then
-        mkinstall="yes"
-elif [ "$2" != "" ]; then
-        pckname=$2
-
-	if [ "$3" == "-i" ]; then
-		mkinstall="yes"
-	fi
-fi
-
-pckdir=${pckname:0:1}/$pckname
-
-mkdir -p packages/$pckdir/files
-
-cp modules/bin-releases/$file packages/$pckdir/files/
-
-echo "./configure --prefix=/usr" > packages/$pckdir/build.sh
-echo "make" >> packages/$pckdir/build.sh
-echo 'make DESTDIR=$PCKDIR install' >> packages/$pckdir/build.sh
-
-echo "name=$pckname" > packages/$pckdir/pck
-echo "version=$version" >> packages/$pckdir/pck
-echo "source=$file" >> packages/$pckdir/pck
-
-if [ "$mkinstall" == "yes" ]; then
-        mkdir -p packages/$pckdir/install
-        touch packages/$pckdir/install/install.sh
-fi
+EOF
 
 $editor packages/$pckdir/build.sh
-

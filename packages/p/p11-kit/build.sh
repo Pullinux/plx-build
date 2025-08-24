@@ -9,7 +9,10 @@ cat >> trust/trust-extract-compat << "EOF"
 EOF
 
 mkdir __build && cd __build
-meson setup --prefix=/usr --buildtype=release ..
+meson setup ..            \
+      --prefix=/usr       \
+      --buildtype=release \
+      -D trust_paths=/etc/pki/anchors
 ninja
 DESTDIR=$PCKDIR ninja install
 
@@ -18,3 +21,6 @@ mkdir -p $PCKDIR/usr/bin
 ln -sfv /usr/libexec/p11-kit/trust-extract-compat \
         $PCKDIR/usr/bin/update-ca-certificates
 
+mkdir -p $PCKDIR/usr/lib/
+
+ln -sfv ./pkcs11/p11-kit-trust.so $PCKDIR/usr/lib/libnssckbi.so

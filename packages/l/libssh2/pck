@@ -1,0 +1,3 @@
+name=libssh2
+version=1.11.1
+source=libssh2-1.11.1.tar.gz

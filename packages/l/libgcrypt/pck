@@ -1,0 +1,3 @@
+name=libgcrypt
+version=1.11.0
+source=libgcrypt-1.11.0.tar.bz2

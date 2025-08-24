@@ -42,7 +42,9 @@ cleanup_files() {
 }
 
 do_init_config() {
-	sudo ln -s /dev/null $PLX/etc/systemd/network/99-default.link
+    if [ ! -l $PLX/etc/systemd/network/99-default.link ]; then
+	    sudo ln -s /dev/null $PLX/etc/systemd/network/99-default.link
+    fi
 
 	sudo tee $PLX/etc/systemd/network/10-eth-dhcp.network > /dev/null << "EOF"
 [Match]
@@ -95,6 +97,12 @@ HOME_URL="https://github.com/rockytriton"
 RELEASE_TYPE="stable"
 EOF
 
+    sudo tee $PLX/etc/resolv.conf > /dev/null << "EOF"
+nameserver 8.8.8.8
+
+EOF
+
+
 	sudo chroot "$PLX" /usr/bin/env -i   \
             HOME=/root                  \
             PS1='(lfs chroot) \u:\w\$ ' \
@@ -106,6 +114,7 @@ EOF
 }
 
 do_install_process() {
+    set -e
     process="${1:?}"
 
     if $(pck_installed $process) ; then
@@ -232,5 +241,86 @@ build_inst_pck pcre2
 build_inst_pck docutils
 build_inst_pck glib
 build_inst_pck polkit
+
+build_inst_pck curl
+build_inst_pck libarchive
+build_inst_pck libuv
+build_inst_pck nghttp2
+build_inst_pck cmake
+build_inst_pck llvm
+
+build_inst_pck sqlite
+build_inst_pck libssh2
+build_inst_pck python-sqlite
+build_inst_pck rustc
+build_inst_pck rust-bindgen
+build_inst_pck cbindgen
+build_inst_pck cargo-c
+build_inst_pck graphviz
+build_inst_pck vala
+build_inst_pck nettle
+build_inst_pck gnutls
+build_inst_pck libgpg-error
+build_inst_pck libassuan
+build_inst_pck libgcrypt
+build_inst_pck libksba
+build_inst_pck npth
+build_inst_pck lmdb
+build_inst_pck krb5
+build_inst_pck cyrus-sasl
+build_inst_pck openldap
+build_inst_pck pinentry
+build_inst_pck gnupg
+build_inst_pck which
+build_inst_pck lua
+build_inst_pck yasm
+build_inst_pck nasm
+build_inst_pck git
+build_inst_pck six
+build_inst_pck gdb
+build_inst_pck c-ares
+build_inst_pck brotli
+build_inst_pck node
+
+build_inst_pck graphite2
+build_inst_pck libpng
+build_inst_pck freetype-nohb
+build_inst_pck harfbuzz
+build_inst_pck freetype
+build_inst_pck fontconfig
+build_inst_pck fribidi
+build_inst_pck xmlto
+build_inst_pck giflib
+build_inst_pck libjpeg-turbo
+build_inst_pck jasper
+build_inst_pck tiff
+build_inst_pck lcms2
+build_inst_pck libexif
+build_inst_pck libmng
+build_inst_pck libraw
+build_inst_pck openjpeg
+build_inst_pck pixman
+build_inst_pck potrace
+build_inst_pck libsass
+build_inst_pck sassc
+build_inst_pck libogg
+build_inst_pck alsa-lib
+build_inst_pck flac
+build_inst_pck libaom
+build_inst_pck libass
+build_inst_pck libcddb
+build_inst_pck neon
+build_inst_pck libmusicbrainz
+build_inst_pck opus
+build_inst_pck libvorbis
+build_inst_pck lame
+build_inst_pck mpg123
+build_inst_pck speex
+build_inst_pck speexdsp
+build_inst_pck libsndfile
+build_inst_pck libvpx
+build_inst_pck x264
+build_inst_pck x265
+
 
 plx_umount_virt
