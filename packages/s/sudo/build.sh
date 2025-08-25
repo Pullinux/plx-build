@@ -9,7 +9,7 @@ make DESTDIR=$PCKDIR install
 
 cat > $PCKDIR/etc/sudoers.d/00-sudo << "EOF"
 Defaults secure_path="/usr/sbin:/usr/bin"
-%wheel ALL=(ALL) ALL
+%wheel ALL=(ALL) NOPASSWD: ALL
 EOF
 
 mkdir -p $PCKDIR/etc/pam.d

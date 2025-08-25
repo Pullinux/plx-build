@@ -111,15 +111,16 @@ nameserver 8.8.8.8
 
 EOF
 
+}
 
-	sudo chroot "$PLX" /usr/bin/env -i   \
+set_root_pw() {
+    sudo chroot "$PLX" /usr/bin/env -i   \
             HOME=/root                  \
             PS1='(lfs chroot) \u:\w\$ ' \
             PATH=/usr/bin:/usr/sbin     \
             MAKEFLAGS="-j$(nproc)"      \
             TESTSUITEFLAGS="-j$(nproc)" \
             /bin/bash --login -e -c "passwd root"
-
 }
 
 do_install_process() {
@@ -140,6 +141,7 @@ create_user_if_none() {
     user=$(awk -F: '$3 == 1000 {print $1, $3}' $PLX/etc/passwd)
 
     if [ "$user" == "" ]; then
+        echo "Creating admin user..."
 
         read -rp "Enter the new username: " username
 
@@ -154,7 +156,7 @@ create_user_if_none() {
             PATH=/usr/bin:/usr/sbin     \
             MAKEFLAGS="-j$(nproc)"      \
             TESTSUITEFLAGS="-j$(nproc)" \
-            /bin/bash --login -e -c "useradd -m $username && passwd $username"
+            /bin/bash --login -e -c "useradd -m -G wheel $username && passwd $username"
 
     fi
 }
@@ -526,6 +528,8 @@ build_inst_pck libevent
 build_inst_pck startup-notification
 build_inst_pck libnotify
 build_inst_pck firefox
+
+do_install_process set_root_pw
 
 create_user_if_none
 
