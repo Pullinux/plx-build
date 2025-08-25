@@ -137,7 +137,7 @@ do_install_process() {
 }
 
 create_user_if_none() {
-    user=$(awk -F: '$3 == 1000 {print $1, $3}' /etc/passwd)
+    user=$(awk -F: '$3 == 1000 {print $1, $3}' $PLX/etc/passwd)
 
     if [ "$user" == "" ]; then
 
