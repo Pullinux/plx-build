@@ -1,0 +1,3 @@
+name=libevent
+version=2.1.12
+source=libevent-2.1.12-stable.tar.gz

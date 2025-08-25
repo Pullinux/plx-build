@@ -6,6 +6,10 @@ SCRIPT_PATH="$(realpath "${BASH_SOURCE[0]}")"
 SRC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PCK_ROOT="$SRC_DIR/../packages"
 
+if [[ ! -n "${PLX_DO_BUILD:-}" ]]; then
+    export PLX_DO_BUILD=yes
+fi
+
 prep_release_build() {
         SP=$(tar -tf "modules/bin-releases/$1" | awk -F/ '{print $1}' | head -1 || true)
 
@@ -309,6 +313,17 @@ build_pck() {
 		SP=$(tar -tf files/$source | head -1 || true)
 		SP=$(echo $SP | awk -F/ '{print $1}')
 
+		if [ "$SP" == "." ]; then
+			echo "SP == ."
+
+			SP=$(tar -tf files/$source | awk -F/ 'END {print $1}')
+
+			echo "SP Now Last = $SP"
+
+		fi
+
+		echo "CD $SP"
+
 		echo "cd $SP" | sudo tee -a $PLX/usr/share/plx/tmp/prep.sh > /dev/null
 	fi
 
@@ -341,6 +356,8 @@ build_pck() {
 		)
 		popd
 
+		sudo cp $PLX$PLX_ROOT/bin/$pck-$version-plx-1.0.txz $PLX_ROOT/bin/$pck-$version-plx-1.0.txz
+
 		echo "Package build complete for $pck $version"
 	fi
 
@@ -357,10 +374,17 @@ install_pck() {
 
 	sudo rm -rf $PLX/.install
 
-	echo "Installing $PLX_ROOT/bin/$pck-$version-plx-1.0.txz"
+	PLX_BUILD_FILE=$PLX_ROOT/bin/$pck-$version-plx-1.0.txz
+
+	echo "Installing $PLX_BUILD_FILE"
 
 	cd ${PLX:?}/
-	sudo tar -xhf $PLX$PLX_ROOT/bin/$pck-$version-plx-1.0.txz
+
+	if [ "$PLX_DO_BUILD" == "no" ]; then
+		sudo tar -xhf $PLX_BUILD_FILE
+	else
+		sudo tar -xhf $PLX$PLX_BUILD_FILE
+	fi
 
 	if [ -f $PLX/.install/install.sh ]; then
 		echo "Running installer..."
@@ -386,6 +410,7 @@ build_inst_pck() {
 	pck_path=$PCK_ROOT/${pck:0:1}/$pck
 
 	sudo mkdir -p $PLX$PLX_ROOT/tmp/inst
+	sudo mkdir -p $PLX_ROOT/bin
 
 	if [ ! -d $pck_path ]; then
 		echo "package not found: $pck ($pck_path)"
@@ -400,8 +425,12 @@ build_inst_pck() {
 	echo "Getting version..."
 	version=$(pck_get_version $pck)
 
-	if [ ! -f $PLX$PLX_ROOT/bin/$pck-$version-plx-1.0.txz ]; then
-		build_pck $pck $pck_path $version
+	if [ ! -f $PLX_ROOT/bin/$pck-$version-plx-1.0.txz ]; then
+		if [ "$PLX_DO_BUILD" == "no" ]; then
+			echo "Skipping build for $pck..."
+		else
+			build_pck $pck $pck_path $version
+		fi
 	fi
 
 	install_pck $pck $version

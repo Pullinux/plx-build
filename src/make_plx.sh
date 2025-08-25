@@ -36,13 +36,13 @@ if [ ! -f .status ]; then
 fi
 
 cleanup_files() {
-    sudo rm -rf $PLX/tmp/{*,.*}
-    sudo find $PLX/usr/lib $PLX/usr/libexec -name \*.la -delete
-    sudo find $PLX/usr -depth -name $(uname -m)-plx-linux-gnu\* | xargs sudo rm -rf
+    sudo rm -rf $PLX/tmp/{*,.*} || true
+    sudo find $PLX/usr/lib $PLX/usr/libexec -name \*.la -delete || true
+    sudo find $PLX/usr -depth -name $(uname -m)-plx-linux-gnu\* | xargs sudo rm -rf || true
 }
 
 do_init_config() {
-    if [ ! -l $PLX/etc/systemd/network/99-default.link ]; then
+    if [ ! -L $PLX/etc/systemd/network/99-default.link ]; then
 	    sudo ln -s /dev/null $PLX/etc/systemd/network/99-default.link
     fi
 
@@ -73,13 +73,11 @@ $PLX_DEV	/	ext4	defaults	1	1
 
 EOF
 
-
-
-
 }
 
 finish_initial_config() {
-	echo 1.0 > sudo tee $PLX/etc/plx-release > /dev/null
+	echo "1.0" > sudo tee $PLX/etc/plx-release > /dev/null
+    
 	sudo tee $PLX/etc/lsb-release > /dev/null << "EOF"
 DISTRIB_ID="Pullinux"
 DISTRIB_RELEASE="1.0"
@@ -125,6 +123,29 @@ do_install_process() {
     "$process"
 
     echo "$process" | sudo tee -a $PLX$PLX_INSTALLED > /dev/null
+}
+
+create_user_if_none() {
+    user=$(awk -F: '$3 == 1000 {print $1, $3}' /etc/passwd)
+
+    if [ "$user" == "" ]; then
+
+        read -rp "Enter the new username: " username
+
+        if [[ -z "$username" ]]; then
+            echo "No username entered, aborting." >&2
+            exit -1
+        fi
+
+        sudo chroot "$PLX" /usr/bin/env -i   \
+            HOME=/root                  \
+            PS1='(lfs chroot) \u:\w\$ ' \
+            PATH=/usr/bin:/usr/sbin     \
+            MAKEFLAGS="-j$(nproc)"      \
+            TESTSUITEFLAGS="-j$(nproc)" \
+            /bin/bash --login -e -c "useradd -m $username && passwd $username"
+
+    fi
 }
 
 plx_mount_virt
@@ -481,5 +502,20 @@ build_inst_pck qps
 build_inst_pck qtermwidget
 build_inst_pck qterminal
 build_inst_pck screengrab
+
+build_inst_pck sddm
+
+build_inst_pck at-spi2-core
+build_inst_pck gsettings-desktop-schemas
+build_inst_pck gtk3
+build_inst_pck adwaita-icon-theme
+build_inst_pck nspr
+build_inst_pck nss
+build_inst_pck libevent
+build_inst_pck startup-notification
+build_inst_pck libnotify
+build_inst_pck firefox
+
+create_user_if_none
 
 plx_umount_virt

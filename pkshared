@@ -50,3 +50,6 @@ fi
 echo "name=$pckname" > packages/$pckdir/pck
 echo "version=$version" >> packages/$pckdir/pck
 echo "source=$file" >> packages/$pckdir/pck
+
+echo "build_inst_pck $pckname" >> added
+

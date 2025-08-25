@@ -25,11 +25,11 @@ EOF
 patch -Np1 -i $PCKBASE/files/lua-5.4.7-shared_library-1.patch &&
 make linux
 
-make INSTALL_TOP=/usr                \
+make INSTALL_TOP=$PCKDIR/usr         \
      INSTALL_DATA="cp -d"            \
-     INSTALL_MAN=/usr/share/man/man1 \
+     INSTALL_MAN=$PCKDIR/usr/share/man/man1 \
      TO_LIB="liblua.so liblua.so.5.4 liblua.so.5.4.7" \
-     DESTDIR=$PCKDIR install 
+     install 
 
 mkdir -p $PCKDIR/usr/lib/pkgconfig/
 
