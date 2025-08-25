@@ -57,9 +57,13 @@ DHCP=ipv4
 UseDomains=true
 EOF
 
+	sudo tee $PLX/etc/hostname > /dev/null << "EOF"
+plx
+EOF
 	
-	echo "plx" > sudo tee $PLX/etc/hostname > /dev/null
-	echo "127.0.0.1 localhost" > sudo tee $PLX/etc/hosts > /dev/null
+	sudo tee $PLX/etc/hosts > /dev/null << "EOF"
+127.0.0.1 localhost
+EOF
 
 	sudo tee $PLX/etc/adjtime > /dev/null << "EOF"
 0.0 0 0.0
@@ -73,11 +77,18 @@ $PLX_DEV	/	ext4	defaults	1	1
 
 EOF
 
+    sudo tee $PLX/etc/locale.conf > /dev/null << EOF
+LANG=en_US.utf8
+EOF
+
 }
 
 finish_initial_config() {
-	echo "1.0" > sudo tee $PLX/etc/plx-release > /dev/null
-    
+
+	sudo tee $PLX/etc/plx-release > /dev/null << "EOF"
+1.0
+EOF
+
 	sudo tee $PLX/etc/lsb-release > /dev/null << "EOF"
 DISTRIB_ID="Pullinux"
 DISTRIB_RELEASE="1.0"
