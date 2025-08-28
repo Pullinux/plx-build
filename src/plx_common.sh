@@ -333,7 +333,7 @@ build_pck() {
 		echo "Running build in chroot..."
 
 		sudo chmod u+x build.sh
-		chroot_build "../build.sh"
+		chroot_build "../build.sh || ./build.sh"
 	fi
 
 	if [ ! -d install ]; then
@@ -380,11 +380,7 @@ install_pck() {
 
 	cd ${PLX:?}/
 
-	if [ "$PLX_DO_BUILD" == "no" ]; then
-		sudo tar -xhf $PLX_BUILD_FILE
-	else
-		sudo tar -xhf $PLX$PLX_BUILD_FILE
-	fi
+	sudo tar -xhf $PLX_BUILD_FILE
 
 	if [ -f $PLX/.install/install.sh ]; then
 		echo "Running installer..."
@@ -431,6 +427,8 @@ build_inst_pck() {
 		else
 			build_pck $pck $pck_path $version
 		fi
+	else
+		echo "Using pre-built package $PLX_ROOT/bin/$pck-$version-plx-1.0.txz ..."
 	fi
 
 	install_pck $pck $version
