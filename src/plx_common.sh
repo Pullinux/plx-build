@@ -333,7 +333,7 @@ build_pck() {
 		echo "Running build in chroot..."
 
 		sudo chmod u+x build.sh
-		chroot_build "../build.sh || ./build.sh"
+		chroot_build "../build.sh || bash -e ./build.sh"
 	fi
 
 	if [ ! -d install ]; then

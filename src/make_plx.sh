@@ -78,7 +78,7 @@ create_user_if_none() {
             PATH=/usr/bin:/usr/sbin     \
             MAKEFLAGS="-j$(nproc)"      \
             TESTSUITEFLAGS="-j$(nproc)" \
-            /bin/bash --login -e -c "useradd -m -G wheel $username && passwd $username"
+            /bin/bash --login -e -c "useradd -m -G wheel $username; usermod -aG netdev $username || true; passwd $username"
 
     fi
 }
@@ -98,7 +98,9 @@ build_packages base-dev
 
 build_packages base-ui
 
-build_packages base-lxqt
+#build_packages base-lxqt
+
+build_packages base-kde
 
 #
 do_install_process set_root_pw

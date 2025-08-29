@@ -1,0 +1,13 @@
+
+mkdir -v __build 
+cd       __build 
+
+cmake -D CMAKE_INSTALL_PREFIX=$KF6_PREFIX \
+      -D CMAKE_BUILD_TYPE=Release         \
+      -D BUILD_TESTING=OFF                \
+      ..
+
+make
+
+make DESTDIR=$PCKDIR install
+

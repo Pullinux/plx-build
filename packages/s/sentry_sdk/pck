@@ -1,0 +1,3 @@
+name=sentry_sdk
+version=2.22.0
+source=sentry_sdk-2.22.0.tar.gz

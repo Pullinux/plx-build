@@ -1,0 +1,3 @@
+name=libpcap
+version=1.10.5
+source=libpcap-1.10.5.tar.gz

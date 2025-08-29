@@ -9,7 +9,7 @@ make -f Makefile-libbz2_so
 make clean
 
 make
-make DESTDIR=$PCKDIR PREFIX=/usr install
+make PREFIX=$PCKDIR/usr install
 
 mkdir -p $PCKDIR/usr/lib/
 mkdir -p $PCKDIR/usr/bin/

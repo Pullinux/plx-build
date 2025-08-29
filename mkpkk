@@ -1,0 +1,23 @@
+#!/bin/bash
+
+editor=code
+
+. pkshared $1 $2 $3
+
+cat > packages/$pckdir/build.sh << "EOF"
+
+mkdir -v __build 
+cd       __build 
+
+cmake -D CMAKE_INSTALL_PREFIX=$KF6_PREFIX \
+      -D CMAKE_BUILD_TYPE=Release         \
+      -D BUILD_TESTING=OFF                \
+      -W no-dev ..
+
+make
+
+make DESTDIR=$PCKDIR install
+
+EOF
+
+$editor packages/$pckdir/build.sh
