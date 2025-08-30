@@ -378,9 +378,17 @@ install_pck() {
 
 	echo "Installing $PLX_BUILD_FILE"
 
-	cd ${PLX:?}/
-
-	sudo tar -xhf $PLX_BUILD_FILE
+	sudp cp $PLX_BUILD_FILE $PLX$PLX_BUILD_FILE
+	
+	sudo chroot "$PLX" /usr/bin/env -i   \
+		HOME=/root                  \
+		PS1='(lfs chroot) \u:\w\$ ' \
+		PATH=/usr/bin:/usr/sbin     \
+		MAKEFLAGS="-j$(nproc)"      \
+		TESTSUITEFLAGS="-j$(nproc)" \
+		/bin/bash --login -e -c "cd / && tar -xhf $PLX_BUILD_FILE"
+		
+	sudo rm $PLX$PLX_BUILD_FILE
 
 	if [ -f $PLX/.install/install.sh ]; then
 		echo "Running installer..."
