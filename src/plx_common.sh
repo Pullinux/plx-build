@@ -378,7 +378,7 @@ install_pck() {
 
 	echo "Installing $PLX_BUILD_FILE"
 
-	sudp cp $PLX_BUILD_FILE $PLX$PLX_BUILD_FILE
+	sudo cp $PLX_BUILD_FILE $PLX$PLX_BUILD_FILE
 	
 	sudo chroot "$PLX" /usr/bin/env -i   \
 		HOME=/root                  \
